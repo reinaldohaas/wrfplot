@@ -151,6 +151,14 @@ def arg_praser():
         help="Set speed of GIF frame in seconds. Default is 0.5 sec. Lower value increases the speed of animation. To "
         "be used with '--gif' option to take effect.",
     )
+    # Adicionar novo argumento para shapefile
+    parser.add_argument(
+        "--shapefile",
+        metavar="<shapefile>",
+        type=arguments.file_path,
+        default=None,
+        help="Path to a custom shapefile to be used for the map.",
+    )
     parser.add_argument(
         "--version",
         action="store_true",
@@ -178,6 +186,7 @@ def main():
         if file.is_wrf():
             # start_time = time.monotonic()
             start_time = timeit.default_timer()
+            # Passar o argumento do shapefile para a classe WrfPlot
             wrfplt = WrfPlot(
                 input_path=args.input,
                 output_path=args.output,
@@ -188,6 +197,7 @@ def main():
                 animation_speed=args.gif_speed,
                 clevels=args.clevels,
                 dis_clabel=args.no_clabel,
+                shapefile=args.shapefile,
             )
             try:
                 wrfplt.read_file(args.input)

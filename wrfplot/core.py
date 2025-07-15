@@ -53,6 +53,7 @@ class WrfPlot:
         animation_speed=0.5,
         clevels=False,
         dis_clabel=False,
+        shapefile=None, # Adicionar argumento
     ):
         self.nc_fh = None
         self.valid_input = None
@@ -73,12 +74,14 @@ class WrfPlot:
         self.animation = animation
         self.speed = animation_speed
         self.custom_title = None
+        self.shapefile = shapefile # Armazenar o caminho do shapefile
         self.plot = plot.PlotMap(
             output_dir=output_path,
             dpi=dpi,
             clevels=clevels,
             config_file=self.config,
             disable_clabel=dis_clabel,
+            shapefile=self.shapefile, # Passar para PlotMap
         )
         self.total_vars = 1
         self.is_moving_domain = None
@@ -89,6 +92,7 @@ class WrfPlot:
     def get_domain_state(self):
         if self.is_moving_domain is None:
             self.is_moving_domain = wrf.is_moving_domain(self.input)
+    # Restante do arquivo sem alterações...
 
     def read_default_config(self, path=""):
         config = ConfigParser()

@@ -59,6 +59,7 @@ class PlotMap(object):
         dpi=150,
         config_file=None,
         disable_clabel=False,
+        shapefile=None, # Adicionar argumento
     ):
         super(PlotMap, self).__init__()
         self.var_name = var_name
@@ -80,6 +81,7 @@ class PlotMap(object):
         self.cbar = None
         self.cax = None
         self.stream = None
+        self.shapefile = shapefile # Armazenar o caminho do shapefile
         self.disable_clabel = disable_clabel
 
     def create_fig(self, projection):
@@ -99,7 +101,12 @@ class PlotMap(object):
 
     def add_shp_features(self):
         """Read shapefile and add as cartopy features"""
-        wld_shp_f = os.path.join(utils.data_dir(), "shape", "world_shape.shp")
+        # Usar shapefile personalizado se fornecido, senão usar o padrão
+        if self.shapefile:
+            wld_shp_f = self.shapefile
+        else:
+            wld_shp_f = os.path.join(utils.data_dir(), "shape", "world_shape.shp")
+        
         wld_shp_features = ShapelyFeature(
             Reader(wld_shp_f).geometries(), ccrs.PlateCarree(), facecolor="none"
         )
@@ -110,6 +117,8 @@ class PlotMap(object):
     def contour(
         self, var_name, lons, lats, data, title, clevels, fcst_time, colors="blue"
     ):
+    # Restante do arquivo sem alterações...
+    
         self.clear_plots()
         if var_name == "slp":
             data = smooth2d(data, 3, cenweight=4)
